@@ -12,6 +12,10 @@ fun main() {
                 return
             }
             
+            "/help" -> {
+                println("The program calculates the sum of numbers")
+            }
+            
             else -> {
                 println(Calculator.sum(userInput.split(" ").map { it.toInt() }))
             }
