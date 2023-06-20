@@ -2,60 +2,32 @@ package calculator
 
 fun main() {
     do {
-        when (val inputString = readln()) {
-            "" -> {
-                // do nothing
+        print("> ")
+        val userInput = UserInput(readln())
+        when (userInput.command) {
+            Command.CALCULATE -> {
+                println(Calculator(userInput.inputString).result)
             }
-            
-            "/exit" -> {
+            Command.EXIT -> {
                 println("Bye!")
-                return
             }
-            
-            "/help" -> {
-                println("The program calculates the sum of numbers")
+            Command.HELP -> {
+                println("This is the help page...")
             }
-            
-            else -> {
-                UserInput(inputString)
+            Command.INVALID -> {
+                println("Invalid expression")
+            }
+            Command.UNKNOWN -> {
+                println("Unknown command")
             }
         }
-    } while (true)
+    } while (userInput.command != Command.EXIT)
 }
 
-class UserInput(input: String) {
-    private val array = input.split(" ")
-    
-    init {
-        var product = 0
-        var operation = '+'
-        array.forEach {
-            if (it.toIntOrNull() == null) {
-                operation = extractSinglePrefiks(it)
-            } else {
-                product = calculate(product, it.toInt(), operation)
-            }
-        }
-        println(product)
-    }
-    
-    private fun calculate(x: Int, y: Int, operation: Char): Int {
-        if (operation == '+')
-            return x + y
-        if (operation == '-')
-            return x - y
-        return 0
-    }
-    
-    private fun extractSinglePrefiks(input: String): Char {
-        var value = '+'
-        input.forEach {
-            value = prefix(value, it)
-        }
-        return value
-    }
-    
-    private fun prefix(first: Char, second: Char): Char {
-        return if (first == second) '+' else '-'
-    }
+fun String.removeWhitespaces() = filter { !it.isWhitespace() }
+
+fun display(expression: String) {
+    println("\"${expression}\"")
 }
+
+
