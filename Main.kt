@@ -1,33 +1,37 @@
 package calculator
 
+fun runCommand(userInput: UserInput) {
+    when (userInput.input) {
+        "/help" -> println("Help page")
+        "/exit" -> println("Bye!")
+        else -> println("Unknown command")
+    }
+}
+
 fun main() {
     do {
-        print("> ")
-        val userInput = UserInput(readln())
-        when (userInput.command) {
-            Command.CALCULATE -> {
-                println(Calculator(userInput.inputString).result)
-            }
-            Command.EXIT -> {
-                println("Bye!")
-            }
-            Command.HELP -> {
-                println("This is the help page...")
-            }
-            Command.INVALID -> {
-                println("Invalid expression")
-            }
-            Command.UNKNOWN -> {
-                println("Unknown command")
-            }
+        val userInput = UserInput(readln().trim())
+        if (userInput.isCommand()) {
+            runCommand(userInput)
+        } else if (userInput.isValidExpression()) {
+            Calculator(userInput.input)
         }
-    } while (userInput.command != Command.EXIT)
+    } while (!userInput.doQuit)
 }
 
-fun String.removeWhitespaces() = filter { !it.isWhitespace() }
+class UserInput(val input: String) {
+    val doQuit = input == "/exit"
+    fun isCommand() = input.startsWith("/")
 
-fun display(expression: String) {
-    println("\"${expression}\"")
+    fun isValidExpression(): Boolean {
+        println(input.split("[0-9]".toRegex()))
+        return true
+    }
 }
 
-
+class Calculator(private val input: String) {
+    private fun calculate(input: String): Int {
+        println("Answer is ${input}")
+        return 42
+    }
+}
